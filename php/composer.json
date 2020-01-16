@@ -1,0 +1,6 @@
+{
+    "require": {
+        "php-amqplib/php-amqplib": ">=2.9.0",
+        "smi2/phpclickhouse": "^1.3"
+    }
+}
