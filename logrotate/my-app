@@ -1,5 +1,6 @@
 /var/log/my-app/*.log {
     daily
+    maxsize 250M
     missingok
     rotate 14
     compress
