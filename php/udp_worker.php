@@ -1,5 +1,5 @@
 <?php
-include(__DIR__ . '/../src/config.php');
+include(__DIR__ . '/config.php');
 
 $limit = 1;
 // Để số thấp là để test hoặc traffic bạn thấp,
@@ -51,16 +51,15 @@ $channel->queue_bind($queue, $exchange);
  * @param \PhpAmqpLib\Message\AMQPMessage $message
  */
 $callback = function ($message) {
-
-  global  $current,$limit, $db, $config, $request_logs, $php_error_logs, $syslog_logs;
+    global  $current,$limit, $db, $config, $request_logs, $php_error_logs, $syslog_logs;
 
     $msg = $message->body;
 
-    $tmp = explode(' ',$msg);
+    $tmp = explode(' ', $msg);
     if ($msg[0] == "<") { // Đây là Log Apache
         $host = $tmp[3];
     } else {
-      $host = $tmp[1]; // Đây là Log App
+        $host = $tmp[1]; // Đây là Log App
     }
 
     // detect request App log
@@ -68,7 +67,7 @@ $callback = function ($message) {
         $parts = explode(' ', $match[1]);
         $request_logs[] = [
           $parts[0], // Date
-          str_replace('_', ' ',$parts[1]), // Date Time
+          str_replace('_', ' ', $parts[1]), // Date Time
           (int)$parts[2], // Hour
           (int)$parts[3], // Minute
           $parts[4], // Application
@@ -79,7 +78,7 @@ $callback = function ($message) {
           (int)$parts[9], // Memory Used
           $parts[10], // User IP address
         ];
-    } else if (strpos($msg, '[php') !== false) { // Detect PHP Error log
+    } elseif (strpos($msg, '[php') !== false) { // Detect PHP Error log
         // <13>Jan 12 04:52:36 Log-Server [Sun Jan 12 04:52:36.327940 2020] [php7:warn] [pid 29377] [client 14.161.12.25:64472] PHP Warning:  fopen(example.csv): failed to open stream: No such file or directory in /var/www/html/test.php on line 12
         $log = strstr($msg, '[');
         $log_data = getParsedLog($log);
@@ -95,7 +94,7 @@ $callback = function ($message) {
           $log_data['ip_address'],
         ];
     } else { // Detect Syslog
-      $syslog_logs[] = [
+        $syslog_logs[] = [
         date('Y-m-d'),
         date('Y-m-d H:i:s'),
         $msg,
@@ -106,36 +105,36 @@ $callback = function ($message) {
     $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
 
     $current++;
-    if ($current>=$limit){
+    if ($current>=$limit) {
         // Start Import server log
         $current = 0;
         // detect request log
         if (count($request_logs)>0) {
-          $stat = $db->insert(
-            $config['clickhouse']['log_request_table'],
-            $request_logs,
-            ['lr_date', 'lr_datetime', 'lr_hour', 'lr_minute', 'lr_application', 'lr_module', 'lr_action', 'lr_status', 'lr_exectime', 'lr_memory', 'lr_ip' ]
+            $stat = $db->insert(
+              $config['clickhouse']['log_request_table'],
+              $request_logs,
+              ['lr_date', 'lr_datetime', 'lr_hour', 'lr_minute', 'lr_application', 'lr_module', 'lr_action', 'lr_status', 'lr_exectime', 'lr_memory', 'lr_ip' ]
           );
-          echo "\n---=============== Start Log to ".$config['clickhouse']['log_request_table']." with ".count($request_logs)." records ==============-----\n";
-          $request_logs = array();
+            echo "\n---=============== Start Log to ".$config['clickhouse']['log_request_table']." with ".count($request_logs)." records ==============-----\n";
+            $request_logs = array();
         }
         if (count($php_error_logs)>0) {
-          $stat = $db->insert(
-            $config['clickhouse']['log_php_error_table'],
-            $php_error_logs,
-            ['lp_date', 'lp_datetime', 'lp_host', 'lp_type', 'lp_file', 'lp_line', 'lp_message', 'lp_ip' ]
+            $stat = $db->insert(
+              $config['clickhouse']['log_php_error_table'],
+              $php_error_logs,
+              ['lp_date', 'lp_datetime', 'lp_host', 'lp_type', 'lp_file', 'lp_line', 'lp_message', 'lp_ip' ]
           );
-          echo "\n---=============== Start Log to ".$config['clickhouse']['log_php_error_table']." with ".count($php_error_logs)." records ==============-----\n";
-          $php_error_logs = array();
+            echo "\n---=============== Start Log to ".$config['clickhouse']['log_php_error_table']." with ".count($php_error_logs)." records ==============-----\n";
+            $php_error_logs = array();
         }
         if (count($syslog_logs)>0) {
-          $stat = $db->insert(
-            $config['clickhouse']['log_syslog_table'],
-            $syslog_logs,
-            ['ls_date', 'ls_datetime', 'ls_message', 'ls_tag', 'ls_host']
+            $stat = $db->insert(
+              $config['clickhouse']['log_syslog_table'],
+              $syslog_logs,
+              ['ls_date', 'ls_datetime', 'ls_message', 'ls_tag', 'ls_host']
           );
-          echo "\n---=============== Start Log to ".$config['clickhouse']['log_syslog_table']." with ".count($syslog_logs)." records ==============-----\n";
-          $syslog_logs = array();
+            echo "\n---=============== Start Log to ".$config['clickhouse']['log_syslog_table']." with ".count($syslog_logs)." records ==============-----\n";
+            $syslog_logs = array();
         }
     }
 };
@@ -152,13 +151,13 @@ $channel->basic_consume($queue, $consumerTag, false, false, false, false, $callb
 
 // Loop as long as the channel has callbacks registered
 while ($channel->is_consuming()) {
-  $channel->wait();
+    $channel->wait();
 }
 
 function shutdown($channel, $connection)
 {
-	$channel->close();
-	$connection->close();
+    $channel->close();
+    $connection->close();
 }
 
 register_shutdown_function('shutdown', $channel, $connection);
