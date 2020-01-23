@@ -1,4 +1,4 @@
-/var/log/my-app/*.log {
+/var/www/log/*.log {
     daily
     maxsize 250M
     missingok

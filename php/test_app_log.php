@@ -18,7 +18,7 @@ use Monolog\Handler\StreamHandler;
 Timer::start();
 $application_name = 'app-test'; // Application Name
 $logger = new Logger($application_name);
-$logger->pushHandler(new StreamHandler('/var/log/apache2/my-app/app.log', Logger::DEBUG));
+$logger->pushHandler(new StreamHandler('/var/www/log/app.log', Logger::DEBUG));
 
 $module_name = basename($_SERVER['PHP_SELF']); // Module Name
 $action_name = $_SERVER['REQUEST_METHOD']; // Action
@@ -42,7 +42,7 @@ $msg_item[] = $exectime; // Executive Time
 $msg_item[] = \memory_get_peak_usage(true); // Memory Used
 $msg_item[] = $user_ip; // User IP address
 
-$msg .= implode(' ',$msg_item);
+$msg .= implode(' ', $msg_item);
 $msg .= 'END]';
 $logger->info($msg);
 print Timer::resourceUsage();

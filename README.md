@@ -220,11 +220,11 @@ Copy file remote_host.conf vào /etc/syslog-ng/conf.d/
 
 > service syslog-ng restart
 
-Chỗ này mình gặp 1 vấn đề là PHP không tạo được file log trong /var/log/apache2, search google thì có 1 giải pháp:
+Chỗ này mình gặp 1 vấn đề là PHP không tạo được file log trong /var/log/apache2, vì vậy mình cần để log của app ở nơi khác, chỗ mà user www-data truy cập được.
 
-> mkdir /var/log/apache2/my-app
+> mkdir /var/www/log
 
-> chown www-data:www-data /var/log/apache2/my-app
+> chown www-data:www-data /var/www/log
 
 > nano /etc/logrotate.d/my-app
 
