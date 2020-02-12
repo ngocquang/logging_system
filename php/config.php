@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
+require_once 'functions.php';
 
 date_default_timezone_set('UTC');
 // Chú ý set timezone UTC trên server

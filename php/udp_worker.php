@@ -84,23 +84,23 @@ $callback = function ($message) {
         $log_data = getParsedLog($log);
 
         $php_error_logs[] = [
-          date('Y-m-d'),
-          $log_data['dateTime'],
-          $host,
-          $log_data['type'],
-          $log_data['file'],
-          $log_data['line'],
-          $log_data['message'],
-          $log_data['ip_address'],
+            date('Y-m-d'),
+            $log_data['dateTime'],
+            $host,
+            $log_data['type'],
+            $log_data['file'],
+            $log_data['line'],
+            $log_data['message'],
+            $log_data['ip_address'],
         ];
     } else { // Detect Syslog
         $syslog_logs[] = [
-        date('Y-m-d'),
-        date('Y-m-d H:i:s'),
-        $msg,
-        '', // TODO
-        $host
-      ];
+            date('Y-m-d'),
+            date('Y-m-d H:i:s'),
+            $msg,
+            '', // TODO
+            $host
+        ];
     }
     $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
 
@@ -111,28 +111,28 @@ $callback = function ($message) {
         // detect request log
         if (count($request_logs)>0) {
             $stat = $db->insert(
-              $config['clickhouse']['log_request_table'],
-              $request_logs,
-              ['lr_date', 'lr_datetime', 'lr_hour', 'lr_minute', 'lr_application', 'lr_module', 'lr_action', 'lr_status', 'lr_exectime', 'lr_memory', 'lr_ip' ]
-          );
+                $config['clickhouse']['log_request_table'],
+                $request_logs,
+                ['lr_date', 'lr_datetime', 'lr_hour', 'lr_minute', 'lr_application', 'lr_module', 'lr_action', 'lr_status', 'lr_exectime', 'lr_memory', 'lr_ip' ]
+            );
             echo "\n---=============== Start Log to ".$config['clickhouse']['log_request_table']." with ".count($request_logs)." records ==============-----\n";
             $request_logs = array();
         }
         if (count($php_error_logs)>0) {
             $stat = $db->insert(
-              $config['clickhouse']['log_php_error_table'],
-              $php_error_logs,
-              ['lp_date', 'lp_datetime', 'lp_host', 'lp_type', 'lp_file', 'lp_line', 'lp_message', 'lp_ip' ]
-          );
+                $config['clickhouse']['log_php_error_table'],
+                $php_error_logs,
+                ['lp_date', 'lp_datetime', 'lp_host', 'lp_type', 'lp_file', 'lp_line', 'lp_message', 'lp_ip' ]
+            );
             echo "\n---=============== Start Log to ".$config['clickhouse']['log_php_error_table']." with ".count($php_error_logs)." records ==============-----\n";
             $php_error_logs = array();
         }
         if (count($syslog_logs)>0) {
             $stat = $db->insert(
-              $config['clickhouse']['log_syslog_table'],
-              $syslog_logs,
-              ['ls_date', 'ls_datetime', 'ls_message', 'ls_tag', 'ls_host']
-          );
+                $config['clickhouse']['log_syslog_table'],
+                $syslog_logs,
+                ['ls_date', 'ls_datetime', 'ls_message', 'ls_tag', 'ls_host']
+            );
             echo "\n---=============== Start Log to ".$config['clickhouse']['log_syslog_table']." with ".count($syslog_logs)." records ==============-----\n";
             $syslog_logs = array();
         }

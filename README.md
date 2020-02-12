@@ -171,6 +171,10 @@ Chạy command line sau ở thư mục php
 Chạy thử
 > php /var/www/udp_server.php
 
+Cập nhật file config.php
+File này chứa các thông số như IP, port, username, password của RabbitMQ và ClickHouse
+Bạn cần cập nhật đầy đủ, chú ý coi chừng nhầm giữa port 15672 dành cho RabittMQ web management và 5672 dành cho file config để kết nối TCP, trong file config default là 5672
+
 ## Cài UDP Log Worker
 
 Cái này chỉ là 1 script PHP dùng để đọc dữ liệu trong queue trong RabbitMQ và insert vào database ClickHouse
@@ -293,7 +297,7 @@ Cách sử dụng Grafana thì bạn xem trên website [Grafana.com](https://gra
 Hình demo của Tuấn
 ![Grafana](/assets/images/grafana.png "Grafana")
 
-Ghi chú: Vì ghi log của rất nhiều server khác nhau, vì vậy trong Grafana có tính năng Variable dùng để filter theo tên Application khác tốt.
+Ghi chú: Vì ghi log của rất nhiều server khác nhau, vì vậy trong Grafana có tính năng Variable dùng để filter theo tên Application khá tốt.
 
 ## Đoạn kết
 
