@@ -35,8 +35,9 @@ Làm xong rồi, chạy rồi, nên mình mới viết bài này, vừa lưu l�
 7. Cài Supervisor
 8. Cài syslog-ng và gởi log remote
 9. App Log và PHP Error
-10. Grafana vẽ Dashboard
-11. Đoạn kết
+10. Cronjob Retention Log
+11. Grafana vẽ Dashboard
+12. Đoạn kết
 
 
 ## Log hệ thống bằng NodeQuery
@@ -255,6 +256,15 @@ Trong file udp_worker.php có phần detect PHP Error log để đưa vào bản
 
 Sau đó chúng ta bắt đầu vẽ Dashboard bằng cách kết nối vào ClickHouse và query các Chart mình cần.
 
+## Cronjob Retention Log
+
+Cập nhật Crontjob 1 tháng chạy 1 lần để tiến hành xóa Log theo định kỳ.
+Ở đây, data log lưu trong Clickhouse đang được chia theo Partition YYYYMM nên chúng ta sẽ xóa Partition của tháng trước
+> sudo crontab -e
+
+Dán nội dung
+
+> 0 0 1 * * php /var/www/html/retention_log.php
 
 ## Grafana vẽ Dashboard
 
