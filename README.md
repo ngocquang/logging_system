@@ -60,14 +60,7 @@ Cách dễ là chọn Image Ubuntu LAMP 18.04 là xong. Hoặc thuần Ubnuntu 1
 
 Mình để sẵn các command line hoặc xem [link](https://computingforgeeks.com/how-to-install-latest-rabbitmq-server-on-ubuntu-18-04-lts/)
 
-Cài Erlang
-> sudo apt-get update
-
-> sudo apt-get upgrade
-
-> cd ~
-wget http://packages.erlang-solutions.com/site/esl/esl-erlang/FLAVOUR_1_general/esl-erlang_20.1-1~ubuntu~xenial_amd64.deb
-sudo dpkg -i esl-erlang_20.1-1\~ubuntu\~xenial_amd64.deb
+Cài Erlang xem [link](https://computingforgeeks.com/how-to-install-latest-erlang-on-ubuntu-18-04-lts/)
 
 Cài RabbitMQ
 > wget -O- https://dl.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc | sudo apt-key add -
